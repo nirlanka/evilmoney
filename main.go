@@ -1,19 +1,25 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"net/http"
 	"os"
 
 	"github.com/samsarahq/thunder/graphql"
 	"github.com/samsarahq/thunder/graphql/introspection"
 	"github.com/samsarahq/thunder/graphql/schemabuilder"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // server is our graphql server.
-type server struct{}
+type Server struct {
+	Client *mongo.Client
+}
 
 // schema builds the graphql schema.
-func (s *server) schema() *graphql.Schema {
+func (s *Server) schema() *graphql.Schema {
 	builder := schemabuilder.NewSchema()
 	s.RegisterPost(builder)
 
@@ -23,8 +29,18 @@ func (s *server) schema() *graphql.Schema {
 }
 
 func serveGraphql() {
+	// Connect to database
+	clientOptions := options.Client().ApplyURI("mongodb://mongodb:27017")
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	// Instantiate a server, build a server, and serve the schema on port 5000.
-	server := &server{}
+	server := &Server{
+		Client: client,
+	}
 
 	schema := server.schema()
 	introspection.AddIntrospectionToSchema(schema)

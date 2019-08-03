@@ -20,7 +20,7 @@ var posts = []Post{
 }
 
 // registerPost registers the post type.
-func (s *server) RegisterPost(schema *schemabuilder.Schema) {
+func (s *Server) RegisterPost(schema *schemabuilder.Schema) {
 	obj := schema.Object("Post", Post{})
 
 	obj.FieldFunc("age", func(ctx context.Context, p *Post) string {
@@ -30,7 +30,7 @@ func (s *server) RegisterPost(schema *schemabuilder.Schema) {
 }
 
 // registerQuery registers the root query type.
-func (s *server) RegisterQuery(schema *schemabuilder.Schema) {
+func (s *Server) RegisterQuery(schema *schemabuilder.Schema) {
 	obj := schema.Query()
 
 	obj.FieldFunc("posts", func() []Post {
@@ -39,7 +39,7 @@ func (s *server) RegisterQuery(schema *schemabuilder.Schema) {
 }
 
 // registerMutation registers the root mutation type.
-func (s *server) RegisterMutation(schema *schemabuilder.Schema) {
+func (s *Server) RegisterMutation(schema *schemabuilder.Schema) {
 	obj := schema.Mutation()
 
 	obj.FieldFunc("echo", func(args struct{ Message string }) string {
