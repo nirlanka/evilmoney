@@ -14,6 +14,11 @@ type Post struct {
 	CreatedAt time.Time
 }
 
+var posts = []Post{
+	{Title: "first post!", Body: "I was here first!", CreatedAt: time.Now()},
+	{Title: "graphql test", Body: "did you hear about Thunder?", CreatedAt: time.Now()},
+}
+
 // registerPost registers the post type.
 func (s *server) RegisterPost(schema *schemabuilder.Schema) {
 	obj := schema.Object("Post", Post{})
@@ -29,7 +34,7 @@ func (s *server) RegisterQuery(schema *schemabuilder.Schema) {
 	obj := schema.Query()
 
 	obj.FieldFunc("posts", func() []Post {
-		return s.posts
+		return posts
 	})
 }
 

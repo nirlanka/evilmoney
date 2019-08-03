@@ -3,7 +3,6 @@ package main
 import (
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/samsarahq/thunder/graphql"
 	"github.com/samsarahq/thunder/graphql/introspection"
@@ -11,9 +10,7 @@ import (
 )
 
 // server is our graphql server.
-type server struct {
-	posts []Post
-}
+type server struct{}
 
 // schema builds the graphql schema.
 func (s *server) schema() *graphql.Schema {
@@ -27,12 +24,7 @@ func (s *server) schema() *graphql.Schema {
 
 func serveGraphql() {
 	// Instantiate a server, build a server, and serve the schema on port 5000.
-	server := &server{
-		posts: []Post{
-			{Title: "first post!", Body: "I was here first!", CreatedAt: time.Now()},
-			{Title: "graphql", Body: "did you hear about Thunder?", CreatedAt: time.Now()},
-		},
-	}
+	server := &server{}
 
 	schema := server.schema()
 	introspection.AddIntrospectionToSchema(schema)
