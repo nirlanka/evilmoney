@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -19,18 +20,17 @@ func GetDb() *Db {
 	var db_url string
 
 	if !exists {
-		mongo_url = "mongodb://localhost:1000/"
+		mongo_url = "mongodb://localhost:27017/"
 		db_url = "evilmoney"
 	} else {
 		_url := strings.Split(mongo_url, "/")
-
-		mongo_url = strings.Join(_url[0:len(_url)-1], "/")
 		db_url = _url[len(_url)-1]
 	}
 
 	// Connect to database
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	clientOptions := options.Client().ApplyURI(mongo_url)
-	client, err := mongo.Connect(context.TODO(), clientOptions)
+	client, err := mongo.Connect(ctx, clientOptions)
 
 	if err != nil {
 		fmt.Println(err)
