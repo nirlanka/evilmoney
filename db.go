@@ -15,7 +15,7 @@ type Db struct {
 }
 
 func GetDb() *Db {
-	mongo_url, exists := os.LookupEnv("DB_URL")
+	mongo_url, exists := os.LookupEnv("MONGODB_URI")
 	var db_url string
 
 	if !exists {
